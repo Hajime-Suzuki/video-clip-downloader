@@ -25,7 +25,7 @@ def get_data(count: int):
     title_and_urls = [
         {
             'title': title.get('title'),
-            'url': title.get('href')
+            'url': f"https:{title.get('href')}"
         }
         for title in title_wrappers
     ]
