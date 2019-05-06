@@ -3,10 +3,16 @@ from bs4 import BeautifulSoup
 from pprint import pprint
 import json
 from time import sleep
+import subprocess
 
 
 def p(item):
     pprint(item, indent='2')
+
+
+def save_data(filename: str, data):
+    open(filename, 'w').write(
+        json.dumps(data, ensure_ascii=False))
 
 
 def get_data(count: int):
@@ -40,7 +46,9 @@ for i in range(1, 20):
     if not data:
         break
 
-    open(f'data/yuzuradi-{i}.json', 'w').write(
-        json.dumps(data, ensure_ascii=False))
+    save_data(f'data/yuzuradi-{i}.json', data)
+
+    for d in data:
+        subprocess.run(['you-get', '--format=flv360', d['url']])
 
     sleep(1)
