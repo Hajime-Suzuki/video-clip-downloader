@@ -124,3 +124,6 @@ dmypy.json
 node_modules
 
 data/
+*.flv
+*.xml
+*.download

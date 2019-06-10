@@ -1,9 +1,17 @@
+import json
+import subprocess
+from pprint import pprint
+from time import sleep
 import requests
 from bs4 import BeautifulSoup
-from pprint import pprint
-import json
-from time import sleep
-import subprocess
+import os
+
+"""
+This script generates json files from search result.
+"""
+
+search_result_url = input('search result url: ')
+output_filename = input('output filename: ')
 
 
 def p(item):
@@ -16,7 +24,7 @@ def save_data(filename: str, data):
 
 
 def get_data(count: int):
-    url = f'https://search.bilibili.com/all?keyword=%E8%A3%95%E9%9D%99%E7%9A%84%E4%BA%92%E4%B8%8D%E7%9B%B8%E8%AE%A9%E5%B9%BF%E6%92%AD&order=pubdate&duration=0&tids_1=0&page={count}'
+    url = f'{search_result_url}&page={count}'
 
     res = requests.get(url)
 
@@ -39,6 +47,11 @@ def get_data(count: int):
     return title_and_urls
 
 
+out_dir = f'data/{output_filename}'
+
+if not os.path.isdir(out_dir):
+    os.mkdir(out_dir)
+
 for i in range(1, 20):
     print(i)
     data = get_data(i)
@@ -46,9 +59,6 @@ for i in range(1, 20):
     if not data:
         break
 
-    save_data(f'data/yuzuradi-{i}.json', data)
-
-    for d in data:
-        subprocess.run(['you-get', '--format=flv360', d['url']])
+    save_data(f'{out_dir}/{i}.json', data)
 
     sleep(1)
